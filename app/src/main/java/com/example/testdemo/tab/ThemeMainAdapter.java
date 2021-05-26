@@ -1,4 +1,4 @@
-package com.example.testdemo;
+package com.example.testdemo.tab;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.testdemo.R;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.testdemo;
+package com.example.testdemo.tab;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
