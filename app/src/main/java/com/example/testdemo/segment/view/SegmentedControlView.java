@@ -168,7 +168,7 @@ public class SegmentedControlView extends View implements ISegmentedControl{
         itemHorizontalMargin = ta.getDimensionPixelSize(R.styleable.SegmentedControlView_segItemHorizontalMargin, 0);
         itemVerticalMargin = ta.getDimensionPixelSize(R.styleable.SegmentedControlView_segItemVerticalMargin, 0);
         selectedItem = ta.getInteger(R.styleable.SegmentedControlView_segSelectedItem, 0);
-        textSize = ta.getDimensionPixelSize(R.styleable.SegmentedControlView_segTextSize, getResources().getDimensionPixelOffset(14));
+        textSize = ta.getDimensionPixelSize(R.styleable.SegmentedControlView_segTextSize, 14);
         cornersMode = ta.getInt(R.styleable.SegmentedControlView_segCornersMode, Round);
         scrollSelectEnabled = ta.getBoolean(R.styleable.SegmentedControlView_segScrollSelectEnabled, true);
         itemPadding = ta.getDimensionPixelOffset(R.styleable.SegmentedControlView_segItemPadding, dp2px(30));
