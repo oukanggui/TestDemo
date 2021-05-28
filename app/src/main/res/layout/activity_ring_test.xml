@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ring.RingTestActivity">
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/timg"
+            app:civ_border_width="0dp" />
+        <com.example.testdemo.ring.CircleRingProgressView
+            android:id="@+id/progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            app:crp_max="100"
+            app:crp_roundWidth="7dp"
+            app:crp_roundColor="#e0e0e0"
+            app:crp_progressColor="#61cc0a"
+            app:crp_startAngle="135" />
+    </FrameLayout>
+</LinearLayout>
