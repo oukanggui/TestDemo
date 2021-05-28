@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SegmentedControlView">
-        <attr name="segCornersRadius" format="dimension|reference"/>
-        <attr name="segBackgroundColor" format="color"/>
-        <attr name="segSelectedItemBackgroundColor" format="color"/>
-        <attr name="segTextColor" format="color"/>
-        <attr name="segSelectedItemTextColor" format="color"/>
-        <attr name="segItemHorizontalMargin" format="dimension|reference"/>
-        <attr name="segItemVerticalMargin" format="dimension|reference"/>
-        <attr name="segSelectedItem" format="integer"/>
-        <attr name="segItemPadding" format="dimension|reference"/>
-        <attr name="segTextSize" format="dimension"/>
-        <attr name="segScrollSelectEnabled" format="boolean"/>
+        <attr name="segCornersRadius" format="dimension|reference" />
+        <attr name="segBackgroundColor" format="color" />
+        <attr name="segSelectedItemBackgroundColor" format="color" />
+        <attr name="segTextColor" format="color" />
+        <attr name="segSelectedItemTextColor" format="color" />
+        <attr name="segItemHorizontalMargin" format="dimension|reference" />
+        <attr name="segItemVerticalMargin" format="dimension|reference" />
+        <attr name="segSelectedItem" format="integer" />
+        <attr name="segItemPadding" format="dimension|reference" />
+        <attr name="segTextSize" format="dimension" />
+        <attr name="segScrollSelectEnabled" format="boolean" />
         <attr name="segCornersMode">
-            <enum name="Round" value="0"/>
-            <enum name="Circle" value="1"/>
+            <enum name="Round" value="0" />
+            <enum name="Circle" value="1" />
         </attr>
     </declare-styleable>
 
     <!--环形进度View-->
     <declare-styleable name="CircleRingProgressView">
         <!--圆环背景颜色,默认透明-->
-        <attr name="crp_bgColor" format="color"/>
+        <attr name="crp_bgColor" format="color" />
         <!--圆环颜色-->
         <attr name="crp_roundColor" format="color" />
         <!--圆环的宽度-->
@@ -34,5 +34,15 @@
         <attr name="crp_max" format="integer" />
         <!--开始角度，指定进度初始点的绘制位置，设置值应在90-360之间-->
         <attr name="crp_startAngle" format="integer" />
+    </declare-styleable>
+
+    <!--颜色滑动选择器-->
+    <declare-styleable name="ColorPickerView">
+        <attr name="indicatorColor" format="color" /><!--指示点颜色-->
+        <attr name="indicatorEnable" format="boolean" /><!--是否启用指示点-->
+        <attr name="orientation" format="integer">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
     </declare-styleable>
 </resources>

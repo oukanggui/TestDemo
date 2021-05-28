@@ -28,4 +28,15 @@
             app:crp_progressColor="#61cc0a"
             app:crp_startAngle="135" />
     </FrameLayout>
+
+    <com.example.testdemo.ring.ColorPickerView
+        android:id="@+id/color_picker"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#ffffff"
+        app:indicatorColor="#ffffff"
+        app:indicatorEnable="true"
+        app:orientation="horizontal" />
 </LinearLayout>

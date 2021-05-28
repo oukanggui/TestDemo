@@ -247,6 +247,11 @@ public class CircleRingProgressView extends View {
         return (float) Math.toDegrees(aSin);
     }
 
+    public void setProgressColor(int progressColor) {
+        this.mProgressColor = progressColor;
+        postInvalidate();
+    }
+
     /**
      * 获取进度
      *
