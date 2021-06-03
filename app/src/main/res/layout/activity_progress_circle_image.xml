@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ring.ProgressCircleImageActivity">
+
+    <com.example.testdemo.ring.ProgressCircleImageLayout
+        android:id="@+id/layout_progress_circle_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        app:pci_roundWidth="10dp"
+        app:pci_roundColor="#e0e0e0"
+        app:pci_progressColor="#61cc0a"
+        app:pci_startAngle="90"/>
+
+    <com.example.testdemo.ring.ColorPickerView
+        android:id="@+id/color_picker"
+        android:layout_below="@id/layout_progress_circle_image"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#ffffff"
+        app:indicatorColor="#ffffff"
+        app:indicatorEnable="true"
+        app:orientation="horizontal" />
+</RelativeLayout>

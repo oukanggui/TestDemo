@@ -1,43 +1,40 @@
 package com.example.testdemo.ring;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.testdemo.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author oukanggui
- * @date 2019/3/5
- * 描述：圆环形进度条
+ * @date 2021/6/3
+ * @description 自定义的带圆环进度的圆形头像ImageView
  */
+public class ProgressCircleImageLayout extends FrameLayout {
+    private CircleImageView circleImageView;
 
-public class CircleRingProgressView extends View {
     /**
-     * 底部画笔
+     * 圆环底部画笔
      */
-    private Paint mPaint;
+    private Paint mProgressBottomPaint;
     /**
      * 进度圆环画笔
      */
     private Paint mProgressPaint;
-    /**
-     * 背景色画笔
-     */
-    private Paint mBackgroundPaint;
-    /**
-     * 背景色
-     */
-    private int mBgColor;
     /**
      * 圆环的颜色
      */
@@ -78,10 +75,6 @@ public class CircleRingProgressView extends View {
      */
     private int radius;
     /**
-     * 内部渐变圆形的半径
-     */
-    private int innerRadius;
-    /**
      * 是否正在进行动效刷新
      */
     private volatile boolean mIsRefreshing = false;
@@ -99,40 +92,54 @@ public class CircleRingProgressView extends View {
 
     };
 
-    public CircleRingProgressView(Context context) {
-        this(context, null);
+    public ProgressCircleImageLayout(@NonNull Context context) {
+        super(context);
+        init(context, null);
     }
 
-    public CircleRingProgressView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public ProgressCircleImageLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs);
     }
 
-    public CircleRingProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ProgressCircleImageLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
-        // 画笔
-        mPaint = new Paint();
-        mProgressPaint = new Paint();
-        mBackgroundPaint = new Paint();
-        // 读取自定义属性的值
-        TypedArray mTypedArray = context.obtainStyledAttributes(attrs, R.styleable.CircleRingProgressView);
-        // 获取自定义属性和默认值
-        mRoundColor = mTypedArray.getColor(R.styleable.CircleRingProgressView_crp_roundColor, Color.RED);
-        mRoundWidth = mTypedArray.getDimension(R.styleable.CircleRingProgressView_crp_roundWidth, 5);
-        mProgressColor = mTypedArray.getColor(R.styleable.CircleRingProgressView_crp_progressColor, Color.GREEN);
-        mProgressWidth = mTypedArray.getDimension(R.styleable.CircleRingProgressView_crp_progressWidth, mRoundWidth);
-        max = mTypedArray.getInteger(R.styleable.CircleRingProgressView_crp_max, 100);
-        mStartAngle = mTypedArray.getInt(R.styleable.CircleRingProgressView_crp_startAngle, 0);
-        mBgColor = mTypedArray.getColor(R.styleable.CircleRingProgressView_crp_bgColor, Color.TRANSPARENT);
-        mTypedArray.recycle();
-//        //默认进度为100%
-//        mProgress = max;
-//        mRealProgress = mProgress;
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public ProgressCircleImageLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs);
     }
 
+    /**
+     * 初始化，进行控件和属性初始化工作
+     *
+     * @param context
+     * @param attrs
+     */
+    private void init(Context context, AttributeSet attrs) {
+        setWillNotDraw(false);
+        inflate(context, R.layout.layout_progress_circle_image, this);
+        circleImageView = findViewById(R.id.iv_circle);
+        if (attrs != null) {
+            TypedArray typedArray = getResources().obtainAttributes(attrs, R.styleable.ProgressCircleImageLayout);
+            // 获取自定义属性和默认值
+            mRoundColor = typedArray.getColor(R.styleable.ProgressCircleImageLayout_pci_roundColor, Color.GRAY);
+            mRoundWidth = typedArray.getDimension(R.styleable.ProgressCircleImageLayout_pci_roundWidth, 10);
+            mProgressColor = typedArray.getColor(R.styleable.ProgressCircleImageLayout_pci_progressColor, Color.GREEN);
+            mProgressWidth = typedArray.getDimension(R.styleable.ProgressCircleImageLayout_pci_progressWidth, mRoundWidth);
+            max = typedArray.getInteger(R.styleable.ProgressCircleImageLayout_pci_max, 100);
+            mStartAngle = typedArray.getInt(R.styleable.ProgressCircleImageLayout_pci_startAngle, 90);
+            typedArray.recycle();
+        }
+        // 控制圆环不遮挡圆角图片
+        circleImageView.setPadding((int) mProgressWidth, (int) mProgressWidth, (int) mProgressWidth, (int) mProgressWidth);
+        // 画笔
+        mProgressBottomPaint = new Paint();
+        mProgressPaint = new Paint();
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -141,54 +148,31 @@ public class CircleRingProgressView extends View {
         mCenterX = getWidth() / 2;
         // 圆环的半径
         radius = (int) (mCenterX - mRoundWidth / 2);
-        innerRadius = (int) (mCenterX - mRoundWidth);
-        // step1.1 画内部背景
-        drawBackground(canvas);
         // step1 画最外层的大圆环
         drawOutArc(canvas);
-
         // step2 画圆弧-画圆环的进度
         drawProgressArc(canvas);
-
-        // step3 画文字指示
-        //drawCenterText(canvas);
     }
 
-    /**
-     * 画背景
-     */
-    private void drawBackground(Canvas canvas) {
-        mBackgroundPaint.setColor(mBgColor);
-        mBackgroundPaint.setStrokeWidth(0);
-        // 消除锯齿
-        mBackgroundPaint.setAntiAlias(true);
-        // 设置画笔为填充样式
-        mBackgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mBackgroundPaint.setStrokeCap(Paint.Cap.ROUND);
-        // 用于定义的圆弧的形状和大小的界限
-        RectF oval = new RectF(0, 0, getWidth(), getWidth());
-        // 根据进度画圆弧
-        canvas.drawArc(oval, 0, 360, false, mBackgroundPaint);
-    }
 
     /**
      * 画最外层的大圆环
      */
     private void drawOutArc(Canvas canvas) {
         // 设置圆环的宽度
-        mPaint.setStrokeWidth(mRoundWidth);
+        mProgressBottomPaint.setStrokeWidth(mRoundWidth);
         // 设置圆环的颜色
-        mPaint.setColor(mRoundColor);
+        mProgressBottomPaint.setColor(mRoundColor);
         // 消除锯齿
-        mPaint.setAntiAlias(true);
+        mProgressBottomPaint.setAntiAlias(true);
         // 设置画笔样式
-        mPaint.setStyle(Paint.Style.STROKE);
+        mProgressBottomPaint.setStyle(Paint.Style.STROKE);
         // 设置圆帽，保证圆弧两端是圆形
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mProgressBottomPaint.setStrokeCap(Paint.Cap.ROUND);
         // 用于定义的圆弧的形状和大小的界限
         RectF oval = new RectF(mCenterX - radius, mCenterX - radius, mCenterX + radius, mCenterX + radius);
         // 根据进度画圆弧
-        canvas.drawArc(oval, mStartAngle, getRangeAngle(), false, mPaint);
+        canvas.drawArc(oval, mStartAngle, getRangeAngle(), false, mProgressBottomPaint);
     }
 
     /**
@@ -309,6 +293,11 @@ public class CircleRingProgressView extends View {
         thread.start();
     }
 
+    /**
+     * 对设置的进度值进行合法性纠正
+     * @param progress
+     * @return
+     */
     private int correctProgress(int progress) {
         if (progress < 0) {
             //throw new IllegalArgumentException("mProgress not less than 0");
@@ -319,6 +308,4 @@ public class CircleRingProgressView extends View {
         }
         return progress;
     }
-
-
 }

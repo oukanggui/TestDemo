@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="SegmentedControlView">
         <attr name="segCornersRadius" format="dimension|reference" />
         <attr name="segBackgroundColor" format="color" />
@@ -18,24 +19,6 @@
         </attr>
     </declare-styleable>
 
-    <!--环形进度View-->
-    <declare-styleable name="CircleRingProgressView">
-        <!--圆环背景颜色,默认透明-->
-        <attr name="crp_bgColor" format="color" />
-        <!--圆环颜色-->
-        <attr name="crp_roundColor" format="color" />
-        <!--圆环的宽度-->
-        <attr name="crp_roundWidth" format="dimension" />
-        <!--圆环上的进度颜色-->
-        <attr name="crp_progressColor" format="color" />
-        <!--圆环上的进度宽度-->
-        <attr name="crp_progressWidth" format="dimension" />
-        <!--进度值的最大值，一般为100-->
-        <attr name="crp_max" format="integer" />
-        <!--开始角度，指定进度初始点的绘制位置，设置值应在90-360之间-->
-        <attr name="crp_startAngle" format="integer" />
-    </declare-styleable>
-
     <!--颜色滑动选择器-->
     <declare-styleable name="ColorPickerView">
         <attr name="indicatorColor" format="color" /><!--指示点颜色-->
@@ -44,5 +27,21 @@
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
         </attr>
+    </declare-styleable>
+
+    <!--环形进度布局的自定义-->
+    <declare-styleable name="ProgressCircleImageLayout">
+        <!--圆环颜色-->
+        <attr name="pci_roundColor" format="color" />
+        <!--圆环的宽度-->
+        <attr name="pci_roundWidth" format="dimension" />
+        <!--圆环上的进度颜色-->
+        <attr name="pci_progressColor" format="color" />
+        <!--圆环上的进度宽度-->
+        <attr name="pci_progressWidth" format="dimension" />
+        <!--进度值的最大值，一般为100-->
+        <attr name="pci_max" format="integer" />
+        <!--开始角度，指定进度初始点的绘制位置，设置值应在90-360之间-->
+        <attr name="pci_startAngle" format="integer" />
     </declare-styleable>
 </resources>
