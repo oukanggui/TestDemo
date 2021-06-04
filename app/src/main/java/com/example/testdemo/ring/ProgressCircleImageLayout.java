@@ -36,6 +36,10 @@ public class ProgressCircleImageLayout extends FrameLayout {
      */
     private Paint mProgressPaint;
     /**
+     * 默认的进度圆环画笔，没有进度时的默认画笔
+     */
+    private Paint mDefaultProgressPaint;
+    /**
      * 圆环的颜色
      */
     private int mRoundColor;
@@ -47,6 +51,10 @@ public class ProgressCircleImageLayout extends FrameLayout {
      * 圆环进度的颜色
      */
     private int mProgressColor;
+    /**
+     * 默认圆环进度的颜色（进度为0时的默认满弧的进度颜色）
+     */
+    private int mDefaultProgressColor;
     /**
      * 圆环进度的宽度
      */
@@ -126,10 +134,11 @@ public class ProgressCircleImageLayout extends FrameLayout {
         if (attrs != null) {
             TypedArray typedArray = getResources().obtainAttributes(attrs, R.styleable.ProgressCircleImageLayout);
             // 获取自定义属性和默认值
-            mRoundColor = typedArray.getColor(R.styleable.ProgressCircleImageLayout_pci_roundColor, Color.GRAY);
+            mRoundColor = typedArray.getColor(R.styleable.ProgressCircleImageLayout_pci_roundColor, Color.TRANSPARENT);
             mRoundWidth = typedArray.getDimension(R.styleable.ProgressCircleImageLayout_pci_roundWidth, 10);
             mProgressColor = typedArray.getColor(R.styleable.ProgressCircleImageLayout_pci_progressColor, Color.GREEN);
             mProgressWidth = typedArray.getDimension(R.styleable.ProgressCircleImageLayout_pci_progressWidth, mRoundWidth);
+            mDefaultProgressColor = typedArray.getColor(R.styleable.ProgressCircleImageLayout_pci_defaultProgressColor, Color.GRAY);
             max = typedArray.getInteger(R.styleable.ProgressCircleImageLayout_pci_max, 100);
             mStartAngle = typedArray.getInt(R.styleable.ProgressCircleImageLayout_pci_startAngle, 90);
             typedArray.recycle();
@@ -139,6 +148,7 @@ public class ProgressCircleImageLayout extends FrameLayout {
         // 画笔
         mProgressBottomPaint = new Paint();
         mProgressPaint = new Paint();
+        mDefaultProgressPaint = new Paint();
     }
 
     @Override
@@ -150,8 +160,15 @@ public class ProgressCircleImageLayout extends FrameLayout {
         radius = (int) (mCenterX - mRoundWidth / 2);
         // step1 画最外层的大圆环
         drawOutArc(canvas);
+
         // step2 画圆弧-画圆环的进度
-        drawProgressArc(canvas);
+        if (mProgress <= 0) {
+            // 进度为0时，画一个灰度弧度圆环
+            drawDefaultProgressArc(canvas);
+        } else {
+            // 进度不为0时，画一个进度圆环
+            drawProgressArc(canvas);
+        }
     }
 
 
@@ -192,6 +209,25 @@ public class ProgressCircleImageLayout extends FrameLayout {
         RectF oval = new RectF(mCenterX - radius, mCenterX - radius, mCenterX + radius, mCenterX + radius);
         // 根据进度画圆弧
         canvas.drawArc(oval, mStartAngle, getSweepAngle(), false, mProgressPaint);
+    }
+
+    /**
+     * 画默认的进度圆弧
+     */
+    private void drawDefaultProgressArc(Canvas canvas) {
+        mDefaultProgressPaint.setColor(mDefaultProgressColor);
+        // 消除锯齿
+        mDefaultProgressPaint.setAntiAlias(true);
+        // 设置画笔样式-空心
+        mDefaultProgressPaint.setStyle(Paint.Style.STROKE);
+        // 设置画笔的宽度使用进度条的宽度
+        mDefaultProgressPaint.setStrokeWidth(mProgressWidth);
+        // 设置圆帽，保证圆弧两端是圆形
+        mDefaultProgressPaint.setStrokeCap(Paint.Cap.ROUND);
+        // 用于定义的圆弧的形状和大小的界限
+        RectF oval = new RectF(mCenterX - radius, mCenterX - radius, mCenterX + radius, mCenterX + radius);
+        // 满弧度
+        canvas.drawArc(oval, mStartAngle, getRangeAngle(), false, mDefaultProgressPaint);
     }
 
     /**
@@ -295,6 +331,7 @@ public class ProgressCircleImageLayout extends FrameLayout {
 
     /**
      * 对设置的进度值进行合法性纠正
+     *
      * @param progress
      * @return
      */

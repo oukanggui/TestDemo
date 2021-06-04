@@ -37,6 +37,8 @@
         <attr name="pci_roundWidth" format="dimension" />
         <!--圆环上的进度颜色-->
         <attr name="pci_progressColor" format="color" />
+        <!--进度为0时的默认满弧的进度颜色-->
+        <attr name="pci_defaultProgressColor" format="color" />
         <!--圆环上的进度宽度-->
         <attr name="pci_progressWidth" format="dimension" />
         <!--进度值的最大值，一般为100-->
