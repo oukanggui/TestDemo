@@ -9,7 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.example.testdemo.R;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class StackCardActivity extends AppCompatActivity {
 
     RecyclerView rv;
-    List<String> mStrings = new ArrayList<>();
+    List<Integer> imageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +29,26 @@ public class StackCardActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new CardLayoutManager());
 
-        for (int i = 1; i < 21; i++) {
-            mStrings.add(String.valueOf(i));
-        }
-        MyAdapter myAdapter = new MyAdapter(this, mStrings);
+        imageList.add(R.mipmap.img1);
+        imageList.add(R.mipmap.img2);
+        imageList.add(R.mipmap.img3);
+        imageList.add(R.mipmap.img4);
+        imageList.add(R.mipmap.img5);
+        MyAdapter myAdapter = new MyAdapter(this, imageList);
         rv.setAdapter(myAdapter);
 
-        ItemTouchHelperCallback itemTouchHelperCallback = new ItemTouchHelperCallback(mStrings, myAdapter);
+        ItemTouchHelperCallback itemTouchHelperCallback = new ItemTouchHelperCallback(imageList, myAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(rv);
     }
 
     class MyAdapter extends RecyclerView.Adapter {
         private Context mContext;
-        private List<String> mStrings;
+        private List<Integer> imageList;
 
-        public MyAdapter(Context mContext, List<String> mStrings) {
+        public MyAdapter(Context mContext, List<Integer> imageList) {
             this.mContext = mContext;
-            this.mStrings = mStrings;
+            this.imageList = imageList;
         }
 
         @NonNull
@@ -58,20 +60,20 @@ public class StackCardActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
             MyViewHolder myViewHolder = (MyViewHolder) viewHolder;
-            myViewHolder.textView.setText(mStrings.get(i) + "/" + getItemCount());
+            myViewHolder.imageView.setImageResource(imageList.get(i));
         }
 
         @Override
         public int getItemCount() {
-            return mStrings.size();
+            return imageList.size();
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView textView;
+            public ImageView imageView;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-                textView = itemView.findViewById(R.id.tv);
+                imageView = itemView.findViewById(R.id.ic_pic);
             }
         }
     }

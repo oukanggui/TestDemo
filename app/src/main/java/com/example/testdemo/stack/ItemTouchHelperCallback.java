@@ -16,10 +16,10 @@ import java.util.List;
  */
 public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    private List<String> mDatas;
+    private List<Integer> mDatas;
     private RecyclerView.Adapter mAdapter;
 
-    public ItemTouchHelperCallback(List<String> mDatas, RecyclerView.Adapter mAdapter) {
+    public ItemTouchHelperCallback(List<Integer> mDatas, RecyclerView.Adapter mAdapter) {
         this.mDatas = mDatas;
         this.mAdapter = mAdapter;
     }
@@ -39,7 +39,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         // 实现循环效果
-        String s = mDatas.remove(viewHolder.getLayoutPosition());
+        Integer s = mDatas.remove(viewHolder.getLayoutPosition());
         mDatas.add(0, s);
         mAdapter.notifyDataSetChanged();
     }
@@ -50,7 +50,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         float distance = (float) Math.hypot(dX, dY);
         float maxDistance = recyclerView.getWidth() / 2f;
 
-        //比例
+        //动画执行的百分比
         float fraction = distance / maxDistance;
         if (fraction > 1) {
             fraction = 1;
@@ -61,7 +61,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         for (int i = 0; i < count; i++) {
             //获取的view从下层到上层
             View view = recyclerView.getChildAt(i);
-
+            //几个view层叠的效果，错开的效果--便宜动画+缩放动画
             int level = CardConfig.SHOW_MAX_COUNT - i - 1;
             //level范围（CardConfig.SHOW_MAX_COUNT-1）-0，每个child最大只移动一个CardConfig.TRANSLATION_Y和放大CardConfig.SCALE
 
