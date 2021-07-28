@@ -12,12 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".stack.StackCardActivity">
+        </activity>
+        <activity android:name=".floatview.FloatViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".floatview.FloatViewActivity">
         </activity>
         <activity android:name=".span.DemoActivity"></activity>
         <activity android:name=".viewpager.ViewPagerDemoActivity" />

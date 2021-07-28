@@ -163,10 +163,10 @@ public class FloatingWindowHelper {
         if (mWindowManager == null) {
             return;
         }
-        if (mChildViewMap != null) {
+        if (mChildViewMap != null && mChildViewMap.containsKey(view)) {
             mChildViewMap.remove(view);
+            mWindowManager.removeView(view);
         }
-        mWindowManager.removeView(view);
     }
 
     /**
