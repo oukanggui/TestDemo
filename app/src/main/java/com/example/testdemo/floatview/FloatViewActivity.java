@@ -20,8 +20,12 @@ public class FloatViewActivity extends AppCompatActivity {
     private FloatingWindowHelper floatingWindowHelper;
     private Button btnShow, btnHide;
     private MusicFloatLayout musicFloatLayout;
+    private View layoutExpand, viewDrag;
     private View floatWindowDeleteView;
     private TextView tvDelete;
+    private boolean isOpen = false;
+    private int widthExpand;
+    private int widthShrink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,27 @@ public class FloatViewActivity extends AppCompatActivity {
         floatingWindowHelper = new FloatingWindowHelper(this);
         View musicRootLayout = LayoutInflater.from(this).inflate(R.layout.layout_float_window, null, false);
         musicFloatLayout = musicRootLayout.findViewById(R.id.layout_root);
+        viewDrag = musicRootLayout.findViewById(R.id.view_drag);
+        layoutExpand = musicRootLayout.findViewById(R.id.layout_expand);
         floatWindowDeleteView = LayoutInflater.from(this).inflate(R.layout.layout_float_window_delete, null, false);
         tvDelete = floatWindowDeleteView.findViewById(R.id.tv_delete);
         btnShow = findViewById(R.id.btn_show);
         btnHide = findViewById(R.id.btn_hide);
+        widthExpand = dp2px(this, 220);
+        widthShrink = dp2px(this, 100);
+        viewDrag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isOpen = !isOpen;
+                if (isOpen) {
+                    layoutExpand.setVisibility(View.VISIBLE);
+                    musicFloatLayout.alignToWindowRight(widthExpand);
+                } else {
+                    layoutExpand.setVisibility(View.GONE);
+                    musicFloatLayout.alignToWindowRight(widthShrink);
+                }
+            }
+        });
         btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

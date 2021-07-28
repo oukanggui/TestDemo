@@ -8,10 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import static android.content.Context.WINDOW_SERVICE;
@@ -21,7 +21,7 @@ import static android.content.Context.WINDOW_SERVICE;
  * @date 2021/7/6
  * @description 音乐悬浮窗布局
  */
-public class MusicFloatLayout extends FrameLayout {
+public class MusicFloatLayout extends LinearLayout {
     /**
      * 窗口宽高
      */
@@ -134,9 +134,7 @@ public class MusicFloatLayout extends FrameLayout {
                     }
                     if (!isReachDeleteArea) {
                         // 未到达删除区域
-                        alignToWindowRight((int) event.getRawX(), (int) event.getRawY());
-                        invalidate();
-                        mWindowManager.updateViewLayout(this, mLayoutParams);
+                        alignToWindowRight(getMeasuredWidth());
                     } else {
                         // 已达到删除区域
                         dismiss();
@@ -192,10 +190,13 @@ public class MusicFloatLayout extends FrameLayout {
 
 
     /**
-     * 判定所处方向
+     * 控件更新到靠右的位置展示
      */
-    private void alignToWindowRight(int x, int y) {
-        mLayoutParams.x = mWindowWidthPixels - getMeasuredWidth();
+    public void alignToWindowRight(int width) {
+        Log.d("CBaymax", "width = " + width);
+        mLayoutParams.x = mWindowWidthPixels - width;
+        invalidate();
+        mWindowManager.updateViewLayout(this, mLayoutParams);
     }
 
 
