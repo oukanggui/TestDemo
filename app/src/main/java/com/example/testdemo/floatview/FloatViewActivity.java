@@ -43,7 +43,7 @@ public class FloatViewActivity extends AppCompatActivity {
         btnHide = findViewById(R.id.btn_hide);
         widthExpand = dp2px(this, 220);
         widthShrink = dp2px(this, 100);
-        viewDrag.setOnClickListener(new View.OnClickListener() {
+        musicFloatLayout.setOnCustomClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isOpen = !isOpen;

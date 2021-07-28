@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -33,10 +34,16 @@ public class MusicFloatLayout extends LinearLayout {
     private WindowManager.LayoutParams mLayoutParams;
     private boolean mIsShow;
     private int mDeleteViewHeight = 0;
+    /**
+     * 记录按下时的x,y坐标
+     */
+    private int downX, downY;
     private int x;
     private int y;
 
     private OnDragListener onDragListener;
+
+    private View.OnClickListener onClickListener;
 
     /**
      * 拖拽监听器
@@ -103,6 +110,8 @@ public class MusicFloatLayout extends LinearLayout {
                 case MotionEvent.ACTION_DOWN:
                     x = (int) event.getRawX();
                     y = (int) event.getRawY();
+                    downX = x;
+                    downY = y;
                     if (onDragListener != null) {
                         onDragListener.onDragStart();
                     }
@@ -132,12 +141,21 @@ public class MusicFloatLayout extends LinearLayout {
                     if (onDragListener != null) {
                         onDragListener.onDragEnd(isReachDeleteArea);
                     }
-                    if (!isReachDeleteArea) {
-                        // 未到达删除区域
-                        alignToWindowRight(getMeasuredWidth());
+                    int upX = (int) event.getRawX();
+                    int upY = (int) event.getRawY();
+                    if (downX == upX && downY == upY) {
+                        // 没有移动，当做点击处理
+                        if (onClickListener != null) {
+                            onClickListener.onClick(this);
+                        }
                     } else {
-                        // 已达到删除区域
-                        dismiss();
+                        if (!isReachDeleteArea) {
+                            // 未到达删除区域
+                            alignToWindowRight(getMeasuredWidth());
+                        } else {
+                            // 已达到删除区域
+                            dismiss();
+                        }
                     }
                     break;
                 default:
@@ -197,6 +215,10 @@ public class MusicFloatLayout extends LinearLayout {
         mLayoutParams.x = mWindowWidthPixels - width;
         invalidate();
         mWindowManager.updateViewLayout(this, mLayoutParams);
+    }
+
+    public void setOnCustomClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
 
