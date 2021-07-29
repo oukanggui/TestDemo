@@ -22,10 +22,11 @@ public class FloatViewActivity extends AppCompatActivity {
     private FloatingWindowHelper floatingWindowHelper;
     private Button btnShow, btnHide;
     private MusicFloatLayout musicFloatLayout;
-    private View layoutExpand, viewDrag;
+    private View layoutExpand, viewDrag, musicRootLayout;
     private View floatWindowDeleteView;
     private TextView tvDelete;
     private boolean isOpen = false;
+    private boolean isShow = false;
     private int widthExpand;
     private int widthShrink;
 
@@ -35,7 +36,7 @@ public class FloatViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_float_view);
         FloatingWindowHelper.canDrawOverlays(this, true);
         floatingWindowHelper = new FloatingWindowHelper(this);
-        View musicRootLayout = LayoutInflater.from(this).inflate(R.layout.layout_float_window, null, false);
+        musicRootLayout = LayoutInflater.from(this).inflate(R.layout.layout_float_window, null, false);
         musicFloatLayout = musicRootLayout.findViewById(R.id.layout_root);
         viewDrag = musicRootLayout.findViewById(R.id.view_drag);
         layoutExpand = musicRootLayout.findViewById(R.id.layout_expand);
@@ -61,6 +62,7 @@ public class FloatViewActivity extends AppCompatActivity {
         btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isShow = true;
                 musicFloatLayout.show(new MusicFloatLayout.OnDragListener() {
                     @Override
                     public void onDragStart() {
@@ -80,6 +82,9 @@ public class FloatViewActivity extends AppCompatActivity {
                     public void onDragEnd(boolean isReachDeleteArea) {
                         Log.d("CBaymax", "onDragEnd:" + isReachDeleteArea);
                         floatingWindowHelper.removeView(floatWindowDeleteView);
+                        if (isReachDeleteArea) {
+                            isShow = false;
+                        }
                     }
                 });
             }
@@ -87,6 +92,7 @@ public class FloatViewActivity extends AppCompatActivity {
         btnHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isShow = false;
                 musicFloatLayout.dismiss();
             }
         });
@@ -95,16 +101,28 @@ public class FloatViewActivity extends AppCompatActivity {
             @Override
             public void onShow() {
                 Toast.makeText(getApplication(), "onShow", Toast.LENGTH_SHORT).show();
+                if (!isShow) {
+                    isShow = true;
+                    musicRootLayout.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onHide() {
                 Toast.makeText(getApplication(), "onHide", Toast.LENGTH_SHORT).show();
+                if (isShow) {
+                    isShow = false;
+                    musicRootLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onBackToDesktop() {
                 Toast.makeText(getApplication(), "onBackToDesktop", Toast.LENGTH_SHORT).show();
+                if (isShow) {
+                    isShow = false;
+                    musicRootLayout.setVisibility(View.GONE);
+                }
             }
         });
     }
