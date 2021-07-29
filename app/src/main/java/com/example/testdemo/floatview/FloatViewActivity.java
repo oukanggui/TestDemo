@@ -13,8 +13,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.testdemo.R;
+import com.example.testdemo.tab.MainActivity;
 
 public class FloatViewActivity extends AppCompatActivity {
     private FloatingWindowHelper floatingWindowHelper;
@@ -86,6 +88,23 @@ public class FloatViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 musicFloatLayout.dismiss();
+            }
+        });
+
+        FloatLifecycle floatLifecycle = new FloatLifecycle(getApplicationContext(), true, null, new FloatLifecycleListener() {
+            @Override
+            public void onShow() {
+                Toast.makeText(getApplication(), "onShow", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onHide() {
+                Toast.makeText(getApplication(), "onHide", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onBackToDesktop() {
+                Toast.makeText(getApplication(), "onBackToDesktop", Toast.LENGTH_SHORT).show();
             }
         });
     }
